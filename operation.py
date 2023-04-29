@@ -144,7 +144,7 @@ def delete_task():
             st.error("Selected task not found!")
 
 def update_task():
-    with st.form("Update Task"):
+    #with st.form("Update Task"):
         task_list, options = get_task_list()
                 
         selected_task = st.selectbox("Select a task to update:", options, key="task_select")
@@ -160,14 +160,25 @@ def update_task():
                 current_end_date = datetime.strptime(task['Finish'], '%Y-%m-%d').date()
                 current_completion = task['Completed']
 
+        # Define callback function to update dates based on selected task
+        def update_dates(selected_task):
+            nonlocal current_start_date, current_end_date
+            for task in task_list:
+                if task['Project'] == selected_task[0] and task['Task'] == selected_task[1]:
+                    current_start_date = datetime.strptime(task['Start'], '%Y-%m-%d').date()
+                    current_end_date = datetime.strptime(task['Finish'], '%Y-%m-%d').date()
+                    break
+
+        # Use the on_change parameter to trigger update_dates function when dropdown selection changes
+        st.selectbox("This one should be hidden:", options, key="task_select2", on_change=update_dates)
 
         new_start_date = st.date_input("New Start date", current_start_date)
         new_end_date = st.date_input("New Due date", current_end_date)
         new_completion = st.checkbox("Task Completed",value=current_completion)
 
-        submitted = st.form_submit_button("Update Task")
+        #submitted = st.form_submit_button("Update Task")
         
-        if submitted:
+        if st.button("Update Task"):
             for task in task_list:
                 if task['Project'] == selected_task[0] and task['Task'] == selected_task[1]:
                     task['Start'] = new_start_date.strftime('%Y-%m-%d')
