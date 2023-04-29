@@ -33,9 +33,7 @@ def add_task():
             st.warning("Please enter a valid date range!")
             return
 
-        if task_name == "":
-            st.warning("Please enter a task name!")
-            return
+
 
         # Convert the date objects to strings
         start_date_str = start_date.strftime("%Y-%m-%d")
@@ -46,6 +44,9 @@ def add_task():
         
 
         if submitted:
+            if task_name == "":
+                st.warning("Please enter a task name!")
+                return
             #st.session_state.Tasks.append(item)
 
             update_database(username, item)
