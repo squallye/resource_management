@@ -19,7 +19,7 @@ with st.form("Registration Form"):
 
 st.markdown(
     """
-    Back to [Home](http://localhost:8501/)
+    Back to [Home](https://resource-management.streamlit.app/)
 
 """
 )

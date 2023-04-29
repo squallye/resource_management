@@ -47,8 +47,8 @@ if 'username' in st.session_state:
         st.write("This is admin page!")
 
         option = st.selectbox(
-        '',
-        ('-- Select an option --','Check individual Workload', 'Check Team Workload','Manage Project'))
+        'Admin Options',
+        ('-- Select an option --','Check individual Workload', 'Check Team Workload','Manage Project'),label_visibility="hidden")
 
         if option == "Check individual Workload":
     
