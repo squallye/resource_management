@@ -65,7 +65,7 @@ def display_ganntt_chart(content):
 
         # Create the chart
         df['Task Completion'] = df['Completed'].map({True: 'Yes', False: 'No'})
-        color_map = {True: 'rgb(50, 205, 50)', False: 'rgb(255, 0, 0)'}
+        color_map = {"Yes": 'rgb(144, 238, 144)', "No": 'rgb(135, 206, 235)'}
         fig = px.timeline(df, x_start="Start", x_end="Finish", y="Task",color="Task Completion",color_discrete_map=color_map)
         fig.update_yaxes(autorange="reversed")
         fig.update_xaxes(side='top')
