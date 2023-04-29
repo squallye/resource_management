@@ -18,10 +18,11 @@ if "username" not in st.session_state:
 PROJECT_LIST = db.get_project_name()
 
 
+
 def add_task():
     
     st.write("Please enter the task details below:")
-    #with st.form("Task submission form"):
+    
     username = st.session_state.username
     project_name = st.selectbox("Project Name",PROJECT_LIST)
     task_name = st.text_input("Task name:",placeholder="Please enter your task name here...")
@@ -31,28 +32,29 @@ def add_task():
 
     if start_date > end_date:
         st.warning("Please enter a valid date range!")
+        return
+    
+    if task_name == "":
+        st.warning("Please enter a task name!")
+        return
 
-    else:
-
-        # Convert the date objects to strings
-        start_date_str = start_date.strftime("%Y-%m-%d")
-        end_date_str = end_date.strftime("%Y-%m-%d")
+    # Convert the date objects to strings
+    start_date_str = start_date.strftime("%Y-%m-%d")
+    end_date_str = end_date.strftime("%Y-%m-%d")
         
-        item = dict(Project= project_name,Task=task_name, Start=start_date_str, Finish=end_date_str, Completed=task_complete)
-        #submitted = st.form_submit_button("Add Task")
+    item = dict(Project= project_name,Task=task_name, Start=start_date_str, Finish=end_date_str, Completed=task_complete)
+    
+    if st.button("Add Task"):
+        st.session_state.Tasks.append(item)
 
-        if st.button("Add Task"):
-            if task_name!="":
-                # Add the new task to the list in session state
-                st.session_state.Tasks.append(item)
+        update_database(username, item)
 
-                existing_work_content = db.get_user_info(username)[0]['work content']
-                existing_work_content.append(item)
+        st.success("Task was added successfully!")
 
-                db.update_user(username,updates={"work content":existing_work_content})
-                st.success("Task was added sucessfully!")
-            else:
-                st.warning("Please enter a task name!")
+def update_database(username, item):
+    existing_work_content = db.get_user_info(username)[0]['work content']
+    existing_work_content.append(item)
+    db.update_user(username,updates={"work content":existing_work_content})
 
 
 @st.cache_data(experimental_allow_widgets=True)
