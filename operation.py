@@ -143,54 +143,41 @@ def delete_task():
         else:
             st.error("Selected task not found!")
 
+def update_dates(selected_task, task_list):
+    current_start_date = datetime.now().date() # default value for start date
+    current_end_date = datetime.now().date() # default value for end date
+    current_completion = True  # default value for completion checkbox
+    for task in task_list:
+        if task['Project'] == selected_task[0] and task['Task'] == selected_task[1]:
+            current_start_date = datetime.strptime(task['Start'], '%Y-%m-%d').date()
+            current_end_date = datetime.strptime(task['Finish'], '%Y-%m-%d').date()
+            current_completion = task['Completed']
+            break
+    return current_start_date, current_end_date,current_completion
+
 def update_task():
-    #with st.form("Update Task"):
-        task_list, options = get_task_list()
-                
-        selected_task = st.selectbox("Select a task to update:", options, key="task_select")
-        
-        
-        current_start_date = datetime.now().date() # default value for start date
-        current_end_date = datetime.now().date() # default value for end date
-        current_completion = True  # default value for completion checkbox
-        
+    task_list, options = get_task_list()
+    selected_task = st.selectbox("Select a task to update:", options, key="task_select")
+    current_start_date, current_end_date,current_completion = update_dates(selected_task, task_list)
+    #current_completion = True  # default value for completion checkbox
+
+    #st.selectbox("This one should be hidden:", options, key="task_select2", on_change=lambda x: update_dates(selected_task, task_list))
+
+    new_start_date = st.date_input("New Start date", current_start_date)
+    new_end_date = st.date_input("New Due date", current_end_date)
+    new_completion = st.checkbox("Task Completed", value=current_completion)
+
+    if st.button("Update Task"):
         for task in task_list:
             if task['Project'] == selected_task[0] and task['Task'] == selected_task[1]:
-                current_start_date = datetime.strptime(task['Start'], '%Y-%m-%d').date()
-                current_end_date = datetime.strptime(task['Finish'], '%Y-%m-%d').date()
-                current_completion = task['Completed']
-
-        # Define callback function to update dates based on selected task
-        def update_dates(selected_task):
-            nonlocal current_start_date, current_end_date
-            for task in task_list:
-                if task['Project'] == selected_task[0] and task['Task'] == selected_task[1]:
-                    current_start_date = datetime.strptime(task['Start'], '%Y-%m-%d').date()
-                    current_end_date = datetime.strptime(task['Finish'], '%Y-%m-%d').date()
-                    break
-
-        # Use the on_change parameter to trigger update_dates function when dropdown selection changes
-        st.selectbox("This one should be hidden:", options, key="task_select2", on_change=update_dates)
-
-        new_start_date = st.date_input("New Start date", current_start_date)
-        new_end_date = st.date_input("New Due date", current_end_date)
-        new_completion = st.checkbox("Task Completed",value=current_completion)
-
-        #submitted = st.form_submit_button("Update Task")
-        
-        if st.button("Update Task"):
-            for task in task_list:
-                if task['Project'] == selected_task[0] and task['Task'] == selected_task[1]:
-                    task['Start'] = new_start_date.strftime('%Y-%m-%d')
-                    task['Finish'] = new_end_date.strftime('%Y-%m-%d')
-                    task['Completed'] = new_completion
-                    
-                    db.update_user(st.session_state.username, updates={"work content": task_list})
-                    st.success("Selected Task has been updated!")
-                    break
-            # If the loop finishes without finding a matching task, show an error message
-            else:
-                st.error("Selected task not found!")
+                task['Start'] = new_start_date.strftime('%Y-%m-%d')
+                task['Finish'] = new_end_date.strftime('%Y-%m-%d')
+                task['Completed'] = new_completion
+                db.update_user(st.session_state.username, updates={"work content": task_list})
+                st.success("Selected Task has been updated!")
+                break
+        else:
+            st.error("Selected task not found!")
 
 
 
