@@ -15,7 +15,7 @@ with st.form("Registration Form"):
         else:
             
             db.add_userdata(new_user,new_password)
-            st.success("New accout setup successfuly")
+            st.success("New accout setup successfuly, return to side bar to login!")
 
 st.markdown(
     """
