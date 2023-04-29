@@ -33,8 +33,8 @@ if 'username' in st.session_state:
         else:
             op.display_ganntt_chart(work_content)
             option = st.selectbox(
-                '',
-                ('-- Select an option --','Add Task', 'Delete Task', 'Update Task'))
+                'Choose your options below:',
+                ('-- Select an option --','Add Task', 'Delete Task', 'Update Task'),label_visibility="hidden")
 
             if option == "Add Task":
                 op.add_task()
