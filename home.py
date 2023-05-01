@@ -5,7 +5,7 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.write("# Welcome to Engineering Resource Management! 👋")
+st.write("# Welcome to Engineering Task Management! 👋")
 
 #st.sidebar.success("Select a demo above.")
 
