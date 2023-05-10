@@ -11,7 +11,7 @@ if "username" not in st.session_state:
 
 
 
-PROJECT_LIST = db.get_project_name()
+#PROJECT_LIST = db.get_project_name()
 
 
 
@@ -21,7 +21,7 @@ def add_task():
     with st.form("Add Task"):
     
         username = st.session_state.username
-        project_name = st.selectbox("Project Name",PROJECT_LIST)
+        project_name = st.selectbox("Project Name",db.get_project_name())
         task_name = st.text_input("Task name:",placeholder="Please enter your task name here...")
         start_date = st.date_input("Start date", dt.date.today())
         end_date = st.date_input("End date", dt.date.today()+dt.timedelta(days=7))
